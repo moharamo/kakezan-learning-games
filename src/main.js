@@ -79,8 +79,7 @@ function renderHub() {
         <button class="game-menu-card available train-menu-card" id="train-game"><span class="game-order">3</span><span class="game-emoji" aria-hidden="true">🚂🚉</span><span class="game-copy"><strong>九九れっしゃ</strong><small>おぼえた だんを まぜて こたえよう</small></span><span class="play-mark">あそぶ ▶</span></button>
         <button class="game-menu-card available ninja-menu-card" id="ninja-game"><span class="game-order">4</span><span class="game-emoji" aria-hidden="true">🥷📜</span><span class="game-copy"><strong>九九にんじゃ</strong><small>81もんから、じかんないに こたえよう</small></span><span class="play-mark">あそぶ ▶</span></button>
       </div>
-    </section>
-    <section class="grownup-note"><span aria-hidden="true">💡</span><div><strong>おうちの かたへ</strong><p>各ゲームは、順唱からランダム想起、混合練習へ段階的に進む設計です。学習記録はこの端末だけに保存されます。</p></div></section>`;
+    </section>`;
   document.querySelector('#rhythm-game').addEventListener('click', renderRhythmHome);
   document.querySelector('#rocket-game').addEventListener('click', () => mountRocketGame({ app, save, persist, playEffect, getReading: entryFor, speak, onExit: renderHub }));
   document.querySelector('#train-game').addEventListener('click', () => mountTrainGame({ app, save, persist, playEffect, getReading: entryFor, speak, onExit: renderHub }));
