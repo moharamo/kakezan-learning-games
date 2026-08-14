@@ -156,7 +156,7 @@ function renderGame(message = 'マイクを おして、こたえを いおう',
   const band = progress.introduced >= 8 ? '🎤🎸🥁🎹🎺' : progress.introduced >= 6 ? '🎤🎸🥁🎹' : progress.introduced >= 3 ? '🎤🎸🥁' : '🎤🥁';
   const speechSupported = isSpeechRecognitionSupported();
   app.innerHTML = `
-    <header class="game-header"><nav class="game-nav" aria-label="もどる"><button id="game-list-button" class="nav-back">‹ ゲームいちらん</button><button id="back-button" class="nav-home" aria-label="だんをえらぶ">⌂</button></nav><strong>${selectedDan}のだん</strong><span>${progress.introduced} / 9</span></header>
+    <header class="game-header compact-game-header"><nav class="game-nav" aria-label="もどる"><button id="game-list-button" class="nav-back" aria-label="ゲームいちらんへもどる">‹ いちらん</button><button id="back-button" class="nav-home" aria-label="だんをえらぶ">⌂</button></nav><strong>${selectedDan}のだん</strong><span>${progress.introduced} / 9</span></header>
     <section class="rhythm-card" data-mood="${mood}">
       <div class="crack-track" aria-label="9もんちゅう ${progress.introduced}もん">
         ${Array.from({ length: 9 }, (_, index) => `<span class="${index < progress.introduced ? 'done' : ''}">${index < progress.introduced ? '♪' : '·'}</span>`).join('')}

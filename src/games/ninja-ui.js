@@ -63,7 +63,7 @@ export function mountNinjaGame({ app, save, persist, playEffect, getReading, spe
     window.scrollTo(0, 0);
     const q = session.currentQuestion;
     const progress = getNinjaProgress(session);
-    app.innerHTML = `<header class="ninja-game-header"><nav class="game-nav" aria-label="もどる"><button id="ninja-game-exit" class="nav-back">‹ ゲームいちらん</button><button id="ninja-quit" class="nav-home" aria-label="レベルをえらぶ">⌂</button></nav><strong>${LEVELS[levelIndex].icon} ${LEVELS[levelIndex].name}</strong><span>${progress.answered + 1} / ${progress.total}</span></header>
+    app.innerHTML = `<header class="ninja-game-header compact-game-header"><nav class="game-nav" aria-label="もどる"><button id="ninja-game-exit" class="nav-back" aria-label="ゲームいちらんへもどる">‹ いちらん</button><button id="ninja-quit" class="nav-home" aria-label="レベルをえらぶ">⌂</button></nav><strong>${LEVELS[levelIndex].icon} ${LEVELS[levelIndex].name}</strong><span>${progress.answered + 1} / ${progress.total}</span></header>
       <section class="ninja-game-card" data-mood="${mood}">
         <div class="ninja-timer" aria-label="のこりじかん"><i id="ninja-timer-bar"></i></div>
         <div class="ninja-stage" aria-hidden="true"><span class="ninja-moon">🌙</span><span class="ninja-clouds">☁️　☁️</span><span class="ninja-hero">🥷</span><span class="ninja-smoke">💨</span></div>
@@ -145,7 +145,7 @@ export function mountNinjaGame({ app, save, persist, playEffect, getReading, spe
   function renderFeedback(q, message, mood, technique) {
     window.scrollTo(0, 0);
     const progress = getNinjaProgress(session);
-    app.innerHTML = `<header class="ninja-game-header"><nav class="game-nav" aria-label="もどる"><button id="ninja-game-exit" class="nav-back">‹ ゲームいちらん</button><button id="ninja-quit" class="nav-home" aria-label="レベルをえらぶ">⌂</button></nav><strong>${LEVELS[levelIndex].icon} ${LEVELS[levelIndex].name}</strong><span>${progress.answered} / ${progress.total}</span></header>
+    app.innerHTML = `<header class="ninja-game-header compact-game-header"><nav class="game-nav" aria-label="もどる"><button id="ninja-game-exit" class="nav-back" aria-label="ゲームいちらんへもどる">‹ いちらん</button><button id="ninja-quit" class="nav-home" aria-label="レベルをえらぶ">⌂</button></nav><strong>${LEVELS[levelIndex].icon} ${LEVELS[levelIndex].name}</strong><span>${progress.answered} / ${progress.total}</span></header>
       <section class="ninja-game-card" data-mood="${mood}"><div class="ninja-result-scene"><span>🥷</span><b>${mood === 'correct' ? technique.split(' ')[0] : '💨'}</b></div><div class="ninja-scroll"><small>${q.multiplicand} × ${q.multiplier}</small><h1>${q.multiplicand}<span>×</span>${q.multiplier}<span>＝</span><b>${q.answer}</b></h1></div><p class="ninja-message" role="status">${message}</p></section>`;
     document.querySelector('#ninja-game-exit').addEventListener('click', onExit);
     document.querySelector('#ninja-quit').addEventListener('click', renderHome);

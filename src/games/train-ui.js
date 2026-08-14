@@ -70,7 +70,7 @@ export function mountTrainGame({ app, save, persist, playEffect, getReading, spe
     window.scrollTo(0, 0);
     const q = session.currentQuestion;
     const progress = getTrainProgress(session);
-    app.innerHTML = `<header class="train-game-header"><nav class="game-nav" aria-label="もどる"><button id="train-game-exit" class="nav-back">‹ ゲームいちらん</button><button id="train-quit" class="nav-home" aria-label="レベルをえらぶ">⌂</button></nav><strong>${LEVELS[levelIndex].icon} ${selectedTables.join('・')}のだん</strong><span>${progress.answered + 1} / ${progress.total}</span></header>
+    app.innerHTML = `<header class="train-game-header compact-game-header"><nav class="game-nav" aria-label="もどる"><button id="train-game-exit" class="nav-back" aria-label="ゲームいちらんへもどる">‹ いちらん</button><button id="train-quit" class="nav-home" aria-label="レベルをえらぶ">⌂</button></nav><strong>${LEVELS[levelIndex].icon} ${selectedTables.join('・')}のだん</strong><span>${progress.answered + 1} / ${progress.total}</span></header>
       <section class="train-game-card" data-mood="${mood}">
         <div class="rail-progress"><i style="width:${progress.percent}%"></i>${Array.from({ length: 5 }, (_, index) => `<span style="left:${index * 24 + 2}%">${index * 25 <= progress.percent ? '🚉' : '·'}</span>`).join('')}</div>
         <h1 class="train-equation">${q.multiplicand}<small>×</small>${q.multiplier}<small>＝</small><b>？</b></h1>

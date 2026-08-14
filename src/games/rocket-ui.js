@@ -78,7 +78,7 @@ export function mountRocketGame({ app, save, persist, playEffect, getReading, sp
     window.scrollTo(0, 0);
     const q = session.currentQuestion;
     const progress = getRocketProgress(session);
-    app.innerHTML = `<header class="rocket-game-header"><nav class="game-nav" aria-label="もどる"><button id="rocket-game-exit" class="nav-back">‹ ゲームいちらん</button><button id="rocket-quit" class="nav-home" aria-label="レベルをえらぶ">⌂</button></nav><strong>${LEVELS[levelIndex].icon} ${LEVELS[levelIndex].name}</strong><span>${progress.answered + 1} / 9</span></header>
+    app.innerHTML = `<header class="rocket-game-header compact-game-header"><nav class="game-nav" aria-label="もどる"><button id="rocket-game-exit" class="nav-back" aria-label="ゲームいちらんへもどる">‹ いちらん</button><button id="rocket-quit" class="nav-home" aria-label="レベルをえらぶ">⌂</button></nav><strong>${LEVELS[levelIndex].icon} ${LEVELS[levelIndex].name}</strong><span>${progress.answered + 1} / 9</span></header>
       <section class="rocket-game-card" data-mood="${mood}">
         <div class="rocket-progress"><i style="width:${progress.percent}%"></i></div>
         ${levelIndex === 3
