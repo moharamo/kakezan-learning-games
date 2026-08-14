@@ -1,8 +1,9 @@
 let manifest = {};
 let currentAudio = null;
+const ASSET_VERSION = '20260815-1';
 
 export async function loadVoiceManifest() {
-  const response = await fetch('./public/audio/voice-manifest.json');
+  const response = await fetch(`./public/audio/voice-manifest.json?v=${ASSET_VERSION}`);
   if (!response.ok) throw new Error('voice-manifest-unavailable');
   manifest = await response.json();
 }
@@ -24,7 +25,7 @@ export function playVoice(text, enabled = true, callback) {
     callback?.();
     return;
   }
-  const audio = new Audio(item.file);
+  const audio = new Audio(`${item.file}?v=${ASSET_VERSION}`);
   currentAudio = audio;
   const finish = () => {
     if (currentAudio === audio) currentAudio = null;
