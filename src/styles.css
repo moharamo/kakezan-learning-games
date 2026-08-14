@@ -11,6 +11,7 @@
 }
 * { box-sizing: border-box; }
 body { min-width: 320px; min-height: 100svh; margin: 0; overflow-x: clip; background: radial-gradient(circle at 50% 0, #fffef7 0, #fff5ce 60%, #f2d984 100%); }
+.site-footer { padding: 1rem; color: #5b6470; font-size: .78rem; text-align: center; }
 button, summary { font: inherit; touch-action: manipulation; }
 button { min-height: 48px; cursor: pointer; }
 button:focus-visible, summary:focus-visible { outline: 4px solid #146c94; outline-offset: 3px; }

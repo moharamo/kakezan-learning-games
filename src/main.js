@@ -1,6 +1,7 @@
 import { parseAudioData } from './audio/parse-audio-data.js';
 import { hiraganaToKatakana } from './audio/speech-text.js';
 import { playEffect } from './audio/sound-effects.js';
+import { loadVoiceManifest, playVoice } from './audio/voice-player.js';
 import { answerRhythmQuestion, createRhythmSession, getRhythmProgress } from './games/rhythm-session.js';
 import { mountRocketGame } from './games/rocket-ui.js';
 import { mountTrainGame } from './games/train-ui.js';
@@ -42,16 +43,7 @@ function entryFor(question) {
 }
 
 function speak(text, callback) {
-  if (!save.voice || !('speechSynthesis' in window)) {
-    callback?.();
-    return;
-  }
-  speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'ja-JP';
-  utterance.rate = 0.78;
-  if (callback) utterance.onend = callback;
-  speechSynthesis.speak(utterance);
+  playVoice(text, save.voice, callback);
 }
 
 function renderHub() {
@@ -307,7 +299,7 @@ function finishGame() {
 }
 
 try {
-  await loadReadings();
+  await Promise.all([loadReadings(), loadVoiceManifest()]);
   renderHub();
 } catch {
   app.innerHTML = '<section class="error-card"><h1>よみこめませんでした</h1><p>かいはつサーバーから ひらいてください。</p></section>';
