@@ -70,7 +70,7 @@ function renderHub() {
     <section aria-labelledby="games-heading">
       <div class="hub-section-title"><h2 id="games-heading">ゲームを えらぼう</h2></div>
       <div class="game-menu">
-        <button class="game-menu-card available" id="rhythm-game">
+        <button class="game-menu-card available rhythm-menu-card" id="rhythm-game">
           <span class="game-order">1</span><span class="game-emoji" aria-hidden="true">🎤🎵</span>
           <span class="game-copy"><strong>九九リズム</strong><small>九九の よみかたと じゅんばんを おぼえよう</small></span>
           <span class="play-mark">あそぶ ▶</span>
