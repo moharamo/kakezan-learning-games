@@ -172,8 +172,10 @@ function renderGame(message = 'マイクを おして、こたえを いおう',
       <p class="traditional-reading">${entry?.traditional.prompt || `${question.multiplicand} かける ${question.multiplier}`}</p>
       <button class="replay-button" id="replay-button" ${showingAnswer ? 'disabled' : ''}>🔊 もういちど きく</button>
       <p class="game-message" id="game-message" role="status">${message}</p>
-      ${speechSupported ? `<button class="microphone-button" id="microphone-button" ${listening || showingAnswer ? 'disabled' : ''}><span>${listening ? '👂' : '🎤'}</span><strong>${showingAnswer ? 'つぎの もんだいへ…' : listening ? 'きいているよ…' : 'こえで こたえる'}</strong></button>` : `<div class="unsupported-message">🎤🚫 この ききでは、こえを きけないよ。</div>`}
-      <button class="keypad-launch" id="keypad-launch" ${showingAnswer ? 'disabled' : ''}>🔢 すうじで こたえる</button>
+      <div class="rhythm-answer-actions">
+        ${speechSupported ? `<button class="microphone-button" id="microphone-button" ${listening || showingAnswer ? 'disabled' : ''}><span>${listening ? '👂' : '🎤'}</span><strong>${showingAnswer ? 'つぎの もんだいへ…' : listening ? 'きいているよ…' : 'こえで こたえる'}</strong></button>` : `<div class="unsupported-message">🎤🚫 こえを きけないよ</div>`}
+        <button class="keypad-launch" id="keypad-launch" ${showingAnswer ? 'disabled' : ''}>🔢 すうじで<br>こたえる</button>
+      </div>
       <div class="keypad-overlay ${keypadOpen ? 'is-open' : ''}" id="keypad-overlay" aria-hidden="${!keypadOpen}">
         <button class="keypad-backdrop" id="keypad-backdrop" aria-label="すうじパッドを とじる"></button>
         <section class="keypad-sheet" role="dialog" aria-modal="true" aria-label="すうじで こたえる">

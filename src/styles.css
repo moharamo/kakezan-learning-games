@@ -166,6 +166,11 @@ button.game-menu-card:hover { transform: translateY(-2px); }
 .microphone-button:disabled { background: #2584a4; }
 .unsupported-message { margin: 1rem 0; padding: .8rem; border-radius: 1rem; background: #f3f0ea; font-weight: 800; }
 .keypad-launch { padding: .6rem 1rem; border: 0; border-radius: 999px; color: #3c5265; background: #eef3f6; font-weight: 900; }
+.rhythm-answer-actions { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; gap: .55rem; }
+.rhythm-answer-actions .microphone-button { width: 100%; min-height: 4.25rem; margin: 0; border-radius: 1.1rem; }
+.rhythm-answer-actions .microphone-button > span { font-size: 1.45rem; }
+.rhythm-answer-actions .keypad-launch { min-height: 4.25rem; padding: .4rem; border: 3px solid #607887; border-radius: 1.1rem; background: #eef6fa; line-height: 1.25; }
+.rhythm-answer-actions .unsupported-message { display: grid; min-height: 4.25rem; margin: 0; padding: .45rem; place-items: center; }
 .keypad-overlay { position: fixed; z-index: 20; inset: 0; display: grid; visibility: hidden; align-items: end; opacity: 0; pointer-events: none; transition: opacity .2s ease, visibility .2s ease; }
 .keypad-overlay.is-open { visibility: visible; opacity: 1; pointer-events: auto; }
 .keypad-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: rgb(24 34 40 / .42); }
@@ -433,7 +438,10 @@ button.game-menu-card:hover { transform: translateY(-2px); }
   .ninja-pad button { min-height: 2.1rem; }
 }
 @media (max-height: 700px) {
-  .music-stage.has-meaning { min-height: 6rem; padding-top: .55rem; }
+  .rhythm-card { padding: .65rem; }
+  .music-stage.has-meaning { min-height: 5.2rem; padding-top: .4rem; }
+  .traditional-reading { margin-bottom: .35rem; }
+  .game-message { min-height: 2.5rem; margin: .45rem 0; padding: .45rem; }
   .ninja-stage { min-height: 2.35rem; }
   .rocket-game-card, .train-game-card, .ninja-game-card { padding-top: .6rem; }
 }
