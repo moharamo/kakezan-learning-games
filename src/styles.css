@@ -31,7 +31,7 @@ button:focus-visible, summary:focus-visible { outline: 4px solid #146c94; outlin
 button.game-menu-card { cursor: pointer; transition: transform .16s ease, box-shadow .16s ease; }
 button.game-menu-card:hover { transform: translateY(-2px); }
 .game-menu-card.available { box-shadow: .35rem .35rem 0 var(--card-shadow); }
-.rhythm-menu-card { --card-color: #9b4f96; --card-soft: #fff0fb; --card-shadow: #e6a9dc; }
+.rhythm-menu-card, #rhythm-game { --card-color: #9b4f96; --card-soft: #fff0fb; --card-shadow: #e6a9dc; }
 .rocket-menu-card { --card-color: #4166bd; --card-soft: #edf4ff; --card-shadow: #8fb1ec; }
 .train-menu-card { --card-color: #24836b; --card-soft: #ebfaf4; --card-shadow: #84ceb6; }
 .ninja-menu-card { --card-color: #a14462; --card-soft: #fff0f2; --card-shadow: #df98aa; }
