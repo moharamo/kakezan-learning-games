@@ -32,7 +32,7 @@ function persist() {
 }
 
 async function loadReadings() {
-  const response = await fetch('/public/data/kakezan-readings.csv');
+  const response = await fetch('./public/data/kakezan-readings.csv');
   if (!response.ok) throw new Error('readings-unavailable');
   readings = new Map(parseAudioData(await response.text()).map((entry) => [entry.id, entry]));
 }
