@@ -28,11 +28,16 @@ export function mountTrainGame({ app, save, persist, playEffect, getReading, spe
   }
 
   function chooseTables(index) {
-    window.scrollTo(0, 0);
     levelIndex = index;
-    selectedTables = [];
     const level = LEVELS[index];
     const needed = TRAIN_LEVELS[level.id].tables;
+    if (needed >= 9) {
+      selectedTables = Array.from({ length: 9 }, (_, table) => table + 1);
+      startJourney();
+      return;
+    }
+    window.scrollTo(0, 0);
+    selectedTables = [];
     const availableTables = Array.from({ length: 9 }, (_, index) => index + 1);
     app.innerHTML = `<header class="train-header"><nav class="game-nav" aria-label="もどる"><button id="train-exit" class="nav-back">‹ ゲームいちらん</button><button id="train-back" class="nav-home" aria-label="レベルをえらぶ">⌂</button></nav><div><p class="eyebrow">${level.icon} ${level.name}</p><h1>のる だんを えらぼう</h1></div></header>
       <section class="ticket-card"><span>🎫</span><div><strong><b id="train-selected-count">0</b> / ${needed} えらんでね</strong><small>えらんだ だんが、ばらばらに でるよ</small></div></section>

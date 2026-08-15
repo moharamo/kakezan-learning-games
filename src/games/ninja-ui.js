@@ -28,13 +28,19 @@ export function mountNinjaGame({ app, save, persist, playEffect, getReading, spe
     timerActive = false;
   }
 
+  function exitGame() {
+    stopTimers();
+    session = null;
+    onExit();
+  }
+
   function renderHome() {
     window.scrollTo(0, 0);
     stopTimers(); session = null;
     app.innerHTML = `<header class="ninja-header"><button id="ninja-exit" class="nav-back" aria-label="ゲームいちらんへ もどる">‹ ゲームいちらん</button><div><p class="eyebrow">ランダム 九九の さいしゅうしゅぎょう</p><h1>🥷 九九にんじゃ</h1></div></header>
       <section class="ninja-welcome"><div aria-hidden="true">🥷📜💨</div><h2>九九の じゅつを きわめよう！</h2><p>81もんから ばらばらに でるよ。まきものが とじるまえに こたえよう。</p></section>
       <div class="ninja-levels">${LEVELS.map((level, index) => `<button data-ninja-level="${index}"><span>${level.icon}</span><span><strong>${level.name}</strong><small>${level.note}</small></span><em>はじめる ▶</em></button>`).join('')}</div>`;
-    document.querySelector('#ninja-exit').addEventListener('click', onExit);
+    document.querySelector('#ninja-exit').addEventListener('click', exitGame);
     document.querySelectorAll('[data-ninja-level]').forEach((button) => button.addEventListener('click', () => { const idx = Number(button.dataset.ninjaLevel); trackEvent('game_open', { game: 'ninja', level: LEVELS[idx].id }); trackPageView('/ninja/' + LEVELS[idx].id, `九九にんじゃ ${LEVELS[idx].name}`); startMission(idx); }));
   }
 
@@ -74,10 +80,10 @@ export function mountNinjaGame({ app, save, persist, playEffect, getReading, spe
           ${[1,2,3,4,5,6,7,8,9].map((digit) => `<button data-ninja-digit="${digit}" ${timerActive && !locked ? '' : 'disabled'}>${digit}</button>`).join('')}
           <button id="ninja-erase" aria-label="ひとつ けす" ${timerActive && !locked ? '' : 'disabled'}>←</button>
           <button data-ninja-digit="0" ${timerActive && !locked ? '' : 'disabled'}>0</button>
-          <button id="ninja-submit" class="ninja-ok" ${timerActive && !locked && answer ? '' : 'disabled'}>決定</button>
+          <button id="ninja-submit" class="ninja-ok" ${timerActive && !locked && answer ? '' : 'disabled'}>こたえる</button>
         </div>
       </section>`;
-    document.querySelector('#ninja-game-exit').addEventListener('click', onExit);
+    document.querySelector('#ninja-game-exit').addEventListener('click', exitGame);
     document.querySelector('#ninja-quit').addEventListener('click', renderHome);
     document.querySelectorAll('[data-ninja-digit]').forEach((button) => button.addEventListener('click', () => enterDigit(button.dataset.ninjaDigit)));
     document.querySelector('#ninja-erase').addEventListener('click', () => { answer = answer.slice(0, -1); updateAnswer(); });
@@ -148,7 +154,7 @@ export function mountNinjaGame({ app, save, persist, playEffect, getReading, spe
     const progress = getNinjaProgress(session);
     app.innerHTML = `<header class="ninja-game-header compact-game-header"><nav class="game-nav" aria-label="もどる"><button id="ninja-game-exit" class="nav-back" aria-label="ゲームいちらんへもどる">‹ いちらん</button><button id="ninja-quit" class="nav-home" aria-label="レベルをえらぶ">⌂</button></nav><strong>${LEVELS[levelIndex].icon} ${LEVELS[levelIndex].name}</strong><span>${progress.answered} / ${progress.total}</span></header>
       <section class="ninja-game-card" data-mood="${mood}"><div class="ninja-result-scene"><span>🥷</span><b>${mood === 'correct' ? technique.split(' ')[0] : '💨'}</b></div><div class="ninja-scroll"><small>${q.multiplicand} × ${q.multiplier}</small><h1>${q.multiplicand}<span>×</span>${q.multiplier}<span>＝</span><b>${q.answer}</b></h1></div><p class="ninja-message" role="status">${message}</p></section>`;
-    document.querySelector('#ninja-game-exit').addEventListener('click', onExit);
+    document.querySelector('#ninja-game-exit').addEventListener('click', exitGame);
     document.querySelector('#ninja-quit').addEventListener('click', renderHome);
   }
 
@@ -162,7 +168,7 @@ export function mountNinjaGame({ app, save, persist, playEffect, getReading, spe
     save.ninja.best[LEVELS[levelIndex].id] = Math.max(save.ninja.best[LEVELS[levelIndex].id] || 0, progress.correct);
     persist();
     app.innerHTML = `<nav class="game-nav" aria-label="もどる"><button id="ninja-finish-exit" class="nav-back">‹ ゲームいちらん</button><button id="ninja-finish-levels" class="nav-home" aria-label="レベルをえらぶ">⌂</button></nav><section class="ninja-finish"><div>🥷📜✨</div><p class="eyebrow">しゅぎょう おわり！</p><h1>${progress.correct} / ${progress.total} せいかい</h1><p>${TECHNIQUES.slice(0, Math.min(4, progress.correct)).join('　')}</p><div><button id="ninja-again">もういちど</button><button id="ninja-next">${levelIndex < 3 ? 'つぎの しゅぎょう' : 'レベルを えらぶ'}</button></div></section>`;
-    document.querySelector('#ninja-finish-exit').addEventListener('click', onExit);
+    document.querySelector('#ninja-finish-exit').addEventListener('click', exitGame);
     document.querySelector('#ninja-finish-levels').addEventListener('click', renderHome);
     document.querySelector('#ninja-again').addEventListener('click', () => startMission(levelIndex));
     document.querySelector('#ninja-next').addEventListener('click', () => levelIndex < 3 ? startMission(levelIndex + 1) : renderHome());
