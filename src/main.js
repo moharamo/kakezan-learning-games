@@ -8,7 +8,10 @@ import { mountTrainGame } from './games/train-ui.js';
 import { mountNinjaGame } from './games/ninja-ui.js';
 import { normalizeSpokenAnswer } from './speech/answer-normalizer.js';
 import { isSpeechRecognitionSupported, recognizeOnce } from './speech/speech-recognizer.js';
-import { trackEvent, trackPageView } from './analytics.js';
+import { initAnalytics, trackEvent, trackPageView } from './analytics.js';
+
+initAnalytics();
+trackPageView('/', document.title);
 
 const app = document.querySelector('#app');
 const TABLE_ORDER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
