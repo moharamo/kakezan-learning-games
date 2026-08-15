@@ -279,15 +279,25 @@ function handleAnswer(answer, heardMessage) {
 }
 
 function renderFeedback(message, mood, spokenText, delay, answeredQuestion) {
-  if (session.completed) {
-    finishGame();
-    return;
-  }
   renderGame(message, mood, answeredQuestion, true);
-  speak(spokenText ? hiraganaToKatakana(spokenText) : message);
+  let audioDone = false;
+  let timerDone = false;
+  const advanceIfReady = () => {
+    if (!audioDone || !timerDone) return;
+    if (session.completed) {
+      finishGame();
+    } else {
+      renderGame();
+      readPrompt();
+    }
+  };
+  speak(spokenText ? hiraganaToKatakana(spokenText) : message, () => {
+    audioDone = true;
+    advanceIfReady();
+  });
   window.setTimeout(() => {
-    renderGame();
-    readPrompt();
+    timerDone = true;
+    advanceIfReady();
   }, delay);
 }
 

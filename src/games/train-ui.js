@@ -136,6 +136,7 @@ export function mountTrainGame({ app, save, persist, playEffect, getReading, spe
 
   function finishJourney(lastMessage) {
     window.scrollTo(0, 0);
+    playEffect('hatch', save.effects);
     const progress = getTrainProgress(session);
     // analytics: train complete
     try { trackEvent('game_complete', { game: 'train', level: LEVELS[levelIndex].id, correct: progress.correct, total: progress.total }); } catch (e) { console.debug('analytics error', e); }

@@ -147,6 +147,7 @@ export function mountRocketGame({ app, save, persist, playEffect, getReading, sp
 
   function finishLevel(lastMessage) {
     window.scrollTo(0, 0);
+    playEffect('hatch', save.effects);
     const progress = getRocketProgress(session);
     // analytics: rocket level complete
     try { trackEvent('game_complete', { game: 'rocket', dan, level: LEVELS[levelIndex].id, correct: progress.correct, total: progress.answered || 9 }); } catch (e) { console.debug('analytics error', e); }

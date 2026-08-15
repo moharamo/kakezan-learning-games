@@ -160,6 +160,7 @@ export function mountNinjaGame({ app, save, persist, playEffect, getReading, spe
 
   function finishMission() {
     window.scrollTo(0, 0);
+    playEffect('hatch', save.effects);
     const progress = getNinjaProgress(session);
     // analytics: ninja complete
     try { trackEvent('game_complete', { game: 'ninja', level: LEVELS[levelIndex].id, correct: progress.correct, total: progress.total }); } catch (e) { console.debug('analytics error', e); }
