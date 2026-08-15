@@ -1,4 +1,5 @@
 import { answerTrainQuestion, buildTrainChoices, createTrainSession, getTrainProgress, TRAIN_LEVELS } from './train-session.js';
+import { trackEvent, trackPageView } from '../analytics.js';
 
 const LEVELS = [
   { id: 'egg', icon: '🥚', name: 'たまご', note: '2つの だんを まぜる' },
@@ -23,7 +24,7 @@ export function mountTrainGame({ app, save, persist, playEffect, getReading, spe
       <section class="train-welcome"><div aria-hidden="true">🚂🚃🚃</div><h2>九九の えきを めぐろう！</h2><p>いろいろな だんを まぜて、こたえるたびに つぎの えきへ。</p></section>
       <div class="train-levels">${LEVELS.map((level, index) => `<button data-train-level="${index}"><span>${level.icon}</span><span><strong>${level.name}</strong><small>${level.note}</small></span><em>しゅっぱつ ▶</em></button>`).join('')}</div>`;
     document.querySelector('#train-exit').addEventListener('click', onExit);
-    document.querySelectorAll('[data-train-level]').forEach((button) => button.addEventListener('click', () => chooseTables(Number(button.dataset.trainLevel))));
+    document.querySelectorAll('[data-train-level]').forEach((button) => button.addEventListener('click', () => { const idx = Number(button.dataset.trainLevel); trackEvent('game_open', { game: 'train', level: LEVELS[idx].id }); trackPageView('/train/' + LEVELS[idx].id, `九九れっしゃ ${LEVELS[idx].name}`); chooseTables(idx); }));
   }
 
   function chooseTables(index) {
@@ -131,6 +132,8 @@ export function mountTrainGame({ app, save, persist, playEffect, getReading, spe
   function finishJourney(lastMessage) {
     window.scrollTo(0, 0);
     const progress = getTrainProgress(session);
+    // analytics: train complete
+    try { trackEvent('game_complete', { game: 'train', level: LEVELS[levelIndex].id, correct: progress.correct, total: progress.total }); } catch (e) { console.debug('analytics error', e); }
     save.train.completedLevel = Math.max(save.train.completedLevel, levelIndex);
     save.train.journeys += 1; persist();
     app.innerHTML = `<nav class="game-nav" aria-label="もどる"><button id="train-finish-exit" class="nav-back">‹ ゲームいちらん</button><button id="train-home" class="nav-home" aria-label="レベルをえらぶ">⌂</button></nav><section class="train-finish"><div>🚂🎉🚉</div><p class="eyebrow">しゅうてんに とうちゃく！</p><h1>${progress.total}この えきを まわれたよ</h1><p>${lastMessage}</p><p>${progress.correct}もん せいかい！</p><div><button id="train-again">もういちど</button></div></section>`;

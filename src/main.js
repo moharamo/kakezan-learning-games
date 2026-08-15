@@ -8,6 +8,7 @@ import { mountTrainGame } from './games/train-ui.js';
 import { mountNinjaGame } from './games/ninja-ui.js';
 import { normalizeSpokenAnswer } from './speech/answer-normalizer.js';
 import { isSpeechRecognitionSupported, recognizeOnce } from './speech/speech-recognizer.js';
+import { trackEvent, trackPageView } from './analytics.js';
 
 const app = document.querySelector('#app');
 const TABLE_ORDER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -72,10 +73,10 @@ function renderHub() {
         <button class="game-menu-card available ninja-menu-card" id="ninja-game"><span class="game-order">4</span><span class="game-emoji" aria-hidden="true">🥷📜</span><span class="game-copy"><strong>九九にんじゃ</strong><small>81もんから、じかんないに こたえよう</small></span><span class="play-mark">あそぶ ▶</span></button>
       </div>
     </section>`;
-  document.querySelector('#rhythm-game').addEventListener('click', renderRhythmHome);
-  document.querySelector('#rocket-game').addEventListener('click', () => mountRocketGame({ app, save, persist, playEffect, getReading: entryFor, speak, onExit: renderHub }));
-  document.querySelector('#train-game').addEventListener('click', () => mountTrainGame({ app, save, persist, playEffect, getReading: entryFor, speak, onExit: renderHub }));
-  document.querySelector('#ninja-game').addEventListener('click', () => mountNinjaGame({ app, save, persist, playEffect, getReading: entryFor, speak, onExit: renderHub }));
+  document.querySelector('#rhythm-game').addEventListener('click', () => { trackEvent('game_open', { game: 'rhythm' }); trackPageView('/rhythm', '九九リズム'); renderRhythmHome(); });
+  document.querySelector('#rocket-game').addEventListener('click', () => { trackEvent('game_open', { game: 'rocket' }); trackPageView('/rocket', '九九ロケット'); mountRocketGame({ app, save, persist, playEffect, getReading: entryFor, speak, onExit: renderHub }); });
+  document.querySelector('#train-game').addEventListener('click', () => { trackEvent('game_open', { game: 'train' }); trackPageView('/train', '九九れっしゃ'); mountTrainGame({ app, save, persist, playEffect, getReading: entryFor, speak, onExit: renderHub }); });
+  document.querySelector('#ninja-game').addEventListener('click', () => { trackEvent('game_open', { game: 'ninja' }); trackPageView('/ninja', '九九にんじゃ'); mountNinjaGame({ app, save, persist, playEffect, getReading: entryFor, speak, onExit: renderHub }); });
 }
 
 function comingGame(order, emoji, name, description) {
@@ -126,6 +127,7 @@ function toggleSetting(key) {
 
 function startGame(dan) {
   selectedDan = dan;
+  trackEvent('game_start', { game: 'rhythm', dan });
   session = createRhythmSession(dan);
   keypadAnswer = '';
   keypadOpen = false;
@@ -288,6 +290,8 @@ function renderFeedback(message, mood, spokenText, delay, answeredQuestion) {
 
 function finishGame() {
   window.scrollTo(0, 0);
+  // analytics: rhythm game complete
+  try { trackEvent('game_complete', { game: 'rhythm', dan: selectedDan }); } catch (e) { console.debug('analytics failed', e); }
   save.completed[selectedDan] = true;
   persist();
   playEffect('hatch', save.effects);

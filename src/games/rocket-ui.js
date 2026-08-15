@@ -1,4 +1,5 @@
 import { answerRocketQuestion, buildRocketChoices, buildRocketFormulaChoices, createRocketSession, getRocketProgress } from './rocket-session.js';
+import { trackEvent, trackPageView } from '../analytics.js';
 
 const LEVELS = [
   { id: 'egg', icon: '🥚', name: 'たまご', note: 'はなれた 3つの わくせいから えらぶ' },
@@ -29,7 +30,7 @@ export function mountRocketGame({ app, save, persist, playEffect, getReading, sp
       <section class="rocket-welcome"><div>🚀　🪐</div><h2>どの だんで とぶ？</h2><p>じゅんばんなしで こたえて、ほしへ すすもう。</p></section>
       <div class="rocket-table-grid">${Array.from({ length: 9 }, (_, i) => i + 1).map((table) => `<button data-rocket-dan="${table}"><span>🚀</span><strong>${table}のだん</strong><small>しゅっぱつ</small></button>`).join('')}</div>`;
     document.querySelector('#rocket-exit').addEventListener('click', onExit);
-    document.querySelectorAll('[data-rocket-dan]').forEach((button) => button.addEventListener('click', () => { dan = Number(button.dataset.rocketDan); renderLevels(); }));
+    document.querySelectorAll('[data-rocket-dan]').forEach((button) => button.addEventListener('click', () => { const picked = Number(button.dataset.rocketDan); trackEvent('game_open', { game: 'rocket', dan: picked }); trackPageView('/rocket/' + picked, `九九ロケット ${picked}のだん`); dan = picked; renderLevels(); }));
   }
 
   function renderLevels() {
@@ -146,7 +147,10 @@ export function mountRocketGame({ app, save, persist, playEffect, getReading, sp
 
   function finishLevel(lastMessage) {
     window.scrollTo(0, 0);
-    const progress = getRocketProgress(session); const stored = tableProgress(dan);
+    const progress = getRocketProgress(session);
+    // analytics: rocket level complete
+    try { trackEvent('game_complete', { game: 'rocket', dan, level: LEVELS[levelIndex].id, correct: progress.correct, total: progress.answered || 9 }); } catch (e) { console.debug('analytics error', e); }
+    const stored = tableProgress(dan);
     stored.completedLevel = Math.max(stored.completedLevel, levelIndex); stored.best[LEVELS[levelIndex].id] = Math.max(stored.best[LEVELS[levelIndex].id] || 0, progress.correct); save.rocket.tables[dan] = stored; persist();
     app.innerHTML = `<nav class="game-nav" aria-label="もどる"><button id="rocket-finish-exit" class="nav-back">‹ ゲームいちらん</button><button id="rocket-finish-levels" class="nav-home" aria-label="レベルをえらぶ">⌂</button></nav><section class="rocket-finish"><div>🚀✨🪐</div><p class="eyebrow">ほしに とうちゃく！</p><h1>9もん できた！</h1><p>${lastMessage}</p><p>${progress.correct}もん せいかいしたよ。</p><div><button id="rocket-again">もういちど</button><button id="rocket-next">${levelIndex < 3 ? 'つぎの レベル' : 'だんを えらぶ'}</button></div></section>`;
     document.querySelector('#rocket-finish-exit').addEventListener('click', onExit);

@@ -1,4 +1,5 @@
 import { answerNinjaQuestion, createNinjaSession, getNinjaProgress, NINJA_LEVELS } from './ninja-session.js';
+import { trackEvent, trackPageView } from '../analytics.js';
 
 const LEVELS = [
   { id: 'egg', icon: '🥚', name: 'みならい', note: '5もん・12びょう' },
@@ -34,7 +35,7 @@ export function mountNinjaGame({ app, save, persist, playEffect, getReading, spe
       <section class="ninja-welcome"><div aria-hidden="true">🥷📜💨</div><h2>九九の じゅつを きわめよう！</h2><p>81もんから ばらばらに でるよ。まきものが とじるまえに こたえよう。</p></section>
       <div class="ninja-levels">${LEVELS.map((level, index) => `<button data-ninja-level="${index}"><span>${level.icon}</span><span><strong>${level.name}</strong><small>${level.note}</small></span><em>はじめる ▶</em></button>`).join('')}</div>`;
     document.querySelector('#ninja-exit').addEventListener('click', onExit);
-    document.querySelectorAll('[data-ninja-level]').forEach((button) => button.addEventListener('click', () => startMission(Number(button.dataset.ninjaLevel))));
+    document.querySelectorAll('[data-ninja-level]').forEach((button) => button.addEventListener('click', () => { const idx = Number(button.dataset.ninjaLevel); trackEvent('game_open', { game: 'ninja', level: LEVELS[idx].id }); trackPageView('/ninja/' + LEVELS[idx].id, `九九にんじゃ ${LEVELS[idx].name}`); startMission(idx); }));
   }
 
   function startMission(index) {
@@ -154,6 +155,8 @@ export function mountNinjaGame({ app, save, persist, playEffect, getReading, spe
   function finishMission() {
     window.scrollTo(0, 0);
     const progress = getNinjaProgress(session);
+    // analytics: ninja complete
+    try { trackEvent('game_complete', { game: 'ninja', level: LEVELS[levelIndex].id, correct: progress.correct, total: progress.total }); } catch (e) { console.debug('analytics error', e); }
     save.ninja.completedLevel = Math.max(save.ninja.completedLevel, levelIndex);
     save.ninja.missions += 1;
     save.ninja.best[LEVELS[levelIndex].id] = Math.max(save.ninja.best[LEVELS[levelIndex].id] || 0, progress.correct);
